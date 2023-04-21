@@ -1,8 +1,8 @@
 import numpy as np
 import cv2 as cv
 import matplotlib.pyplot as plt
-img1 = cv.imread('Sample_Data/Hole_Lit/test23.jpg',cv.IMREAD_GRAYSCALE)          # queryImage
-img2 = cv.imread('Sample_Data/Hole_Lit/test0.jpg',cv.IMREAD_GRAYSCALE) # trainImage
+img1 = cv.imread('Sample_Data/Keys_Lit/test5.jpg',cv.IMREAD_GRAYSCALE)          # queryImage
+img2 = cv.imread('Sample_Data/Keys_Lit/test0.jpg',cv.IMREAD_GRAYSCALE) # trainImage
 # Initiate SIFT detector
 sift = cv.SIFT_create()
 # find the keypoints and descriptors with SIFT

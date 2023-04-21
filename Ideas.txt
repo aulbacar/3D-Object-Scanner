@@ -1,0 +1,8 @@
+Combine matching feature points and contours?
+
+
+Have x (2d x) and z (2d y) coordinates for 3d
+no pre-packaged solutions for cylindrical coordinates
+
+3d z rotation matrix?
+With just x and y as x and z and then increment rotation value?
