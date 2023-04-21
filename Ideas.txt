@@ -9,3 +9,7 @@ With just x and y as x and z and then increment rotation value?
 
 Basically, make x and z planes out of contour maps and rotate 
 across z axis.
+
+Depth marker on turntable?
+
+Or recognize table diameter/radius?
