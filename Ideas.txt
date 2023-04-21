@@ -6,3 +6,6 @@ no pre-packaged solutions for cylindrical coordinates
 
 3d z rotation matrix?
 With just x and y as x and z and then increment rotation value?
+
+Basically, make x and z planes out of contour maps and rotate 
+across z axis.
