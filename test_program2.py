@@ -10,7 +10,7 @@ fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 
 # Load the first image
-img1 = cv.imread('Sample_Data/Keys_Lit/test5.jpg', cv.IMREAD_GRAYSCALE)
+img1 = cv.imread('Sample_Data/Melatonin_Lit/test0.jpg', cv.IMREAD_GRAYSCALE)
 
 # Initialize SIFT detector
 sift = cv.SIFT_create()
@@ -19,7 +19,7 @@ sift = cv.SIFT_create()
 contours_list = []
 
 # loop through each image file in the specified directory
-for filename in glob.glob('path/to/images/*.jpg'): 
+for filename in glob.glob('Sample_Data/Melatonin_Lit/test0.jpg'):
     # read the image file
     img = cv.imread(filename)
     # convert the image to grayscale
@@ -53,7 +53,7 @@ angle_increment = 360 / num_images
 # loop through each image file in the specified directory
 for i in range(num_images):
     # read the image file
-    img = cv.imread('path/to/images/image{}.jpg'.format(i))
+    img = cv.imread('Sample_Data/Melatonin_Lit/test{}.jpg'.format(i))
     # convert the image to grayscale
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     # create a SIFT object
@@ -90,7 +90,7 @@ for i in range(num_images):
         line_seg = [(x1, y1, z1), (x2, y2, z2)]
         # plot the line segment on the 3D plot
         ax.plot(*zip(*line_seg), color='red')
-        
+
 # set the limits of the plot to show the entire object
 ax.set_xlim3d(-50, 50)
 ax.set_ylim3d(-50, 50)
