@@ -1,31 +1,89 @@
 import cv2
+import open3d as o3d
 import numpy as np
 
-image = cv2.imread('Sample_Data/Laser_Bottle/test0.jpg')
-cv2.waitKey(1)
+# Let's load a simple image with 3 black squares
+import numpy as np
 
-# Grayscale
-gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+def get_xyz(contour_img, radius, num_images, distance, laser_angle, pixel_to_distance_ratio):
+    # Calculate the angle of each image based on the number of images captured
+    image_angles = np.linspace(0, 360, num_images, endpoint=False)
 
-# Find Canny edges
-edged = cv2.Canny(gray, 30, 200)
-cv2.waitKey(0)
+    # Calculate the x and y coordinates of each point in the contour map
+    x_coords = contour_img[:,:,0] * pixel_to_distance_ratio
+    y_coords = contour_img[:,:,1] * pixel_to_distance_ratio
 
-# Finding Contours
-# Use a copy of the image e.g. edged.copy()
-# since findContours alters the image
-contours, hierarchy = cv2.findContours(edged,
-    cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    # Calculate the z coordinate of each point in the contour map
+    z_coords = distance * np.cos(np.deg2rad(laser_angle)) - radius * np.sin(np.deg2rad(laser_angle)) - x_coords * np.sin(np.deg2rad(laser_angle))
 
-cv2.imshow('Canny Edges After Contouring', edged)
-cv2.waitKey(0)
+    # Combine the x, y, and z coordinates into a point cloud
+    point_cloud = np.stack((x_coords, y_coords, z_coords), axis=-1)
 
-print("Number of Contours found = " + str(len(contours)))
+    return point_cloud
 
-# Draw all contours
-# -1 signifies drawing all contours
-cv2.drawContours(image, contours, -1, (0, 255, 0), 3)
-#print(contours)
-cv2.imshow('Contours', image)
-cv2.waitKey(0)
+def rotate_point_clouds(point_clouds, angle_degrees, rotation_axis):
+    # Convert angle to radians
+    angle = np.deg2rad(angle_degrees)
+
+    # Create rotation matrix
+    rotation_matrix = np.array([[np.cos(angle), -np.sin(angle), 0], [np.sin(angle), np.cos(angle), 0], [0, 0, 1]])
+
+    # Rotate each point cloud
+    rotated_point_clouds = []
+    for point_cloud in point_clouds:
+        rotated_point_cloud = np.dot(point_cloud, rotation_matrix)
+        rotated_point_clouds.append(rotated_point_cloud)
+
+    return rotated_point_clouds
+
+point_clouds = []
+
+for i in range(1,50):
+    image = cv2.imread(f'Sample_Data/Keys_Lit/test{i}.jpg')
+    cv2.waitKey(1)
+
+    # Grayscale
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    # Find Canny edges
+    edged = cv2.Canny(gray, 30, 200)
+    cv2.waitKey(0)
+
+    # Finding Contours
+    # Use a copy of the image e.g. edged.copy()
+    # since findContours alters the image
+    contours, hierarchy = cv2.findContours(edged,
+        cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+
+    # Draw all contours
+    # -1 signifies drawing all contours
+    cv2.drawContours(image, contours, -1, (0, 255, 0), 3)
+    
+    # cv2.imwrite(f'contour_maps/contour_map_{i}.jpg', image)
+    
+    # Get point cloud from contour map
+    point_cloud = get_xyz(image, 5, 50, 15, 30, 0.1)
+
+    # Add point cloud to list
+    point_clouds.append(point_cloud)
+
+    #print(contours)
+    cv2.imshow('Contours', image)
+    cv2.waitKey(0)
+
+# Rotate each point cloud and add to list
+rotated_point_clouds = rotate_point_clouds(point_clouds, 360, 3)
+
+# Combine all point clouds into one larger point cloud
+point_cloud_combined = np.concatenate(rotated_point_clouds, axis=0)
+
+# Create Open3D point cloud
+pcd = o3d.geometry.PointCloud()
+pcd.points = o3d.utility.Vector3dVector(point_cloud_combined[:, :3])
+pcd.colors = o3d.utility.Vector3dVector(point_cloud_combined[:, 3:6] / 255)
+pcd.normals = o3d.utility.Vector3dVector(point_cloud_combined[:, 6:9])
+
+# Visualize point cloud
+o3d.visualization.draw_geometries([pcd])
+
 cv2.destroyAllWindows()
