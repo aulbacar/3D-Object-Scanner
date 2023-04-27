@@ -3,23 +3,6 @@ import open3d as o3d
 import numpy as np
 
 # Let's load a simple image with 3 black squares
-import numpy as np
-
-def get_xyz(contour_img, radius, num_images, distance, laser_angle, pixel_to_distance_ratio):
-    # Calculate the angle of each image based on the number of images captured
-    image_angles = np.linspace(0, 360, num_images, endpoint=False)
-
-    # Calculate the x and y coordinates of each point in the contour map
-    x_coords = contour_img[:,:,0] * pixel_to_distance_ratio
-    y_coords = contour_img[:,:,1] * pixel_to_distance_ratio
-
-    # Calculate the z coordinate of each point in the contour map
-    z_coords = distance * np.cos(np.deg2rad(laser_angle)) - radius * np.sin(np.deg2rad(laser_angle)) - x_coords * np.sin(np.deg2rad(laser_angle))
-
-    # Combine the x, y, and z coordinates into a point cloud
-    point_cloud = np.stack((x_coords, y_coords, z_coords), axis=-1)
-
-    return point_cloud
 
 i = 0
 while(i < 25):
