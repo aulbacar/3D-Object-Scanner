@@ -21,7 +21,8 @@ def get_xyz(contour_img, radius, num_images, distance, laser_angle, pixel_to_dis
     else:
         raise ValueError(f"Invalid number of dimensions for contour_img: {contour_img.ndim}")
     # y_coords = contour_img[:,:,1] * pixel_to_distance_ratio
-
+    print(x_coords)
+    print(y_coords)
     # Calculate the z coordinate of each point in the contour map
     z_coords = distance * np.cos(np.deg2rad(laser_angle)) - radius * np.sin(np.deg2rad(laser_angle)) - x_coords * np.sin(np.deg2rad(laser_angle))
 
