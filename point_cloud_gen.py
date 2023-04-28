@@ -47,13 +47,13 @@ for i in range(num_images):
     # Finding Contours
     # Use a copy of the image e.g. edged.copy()
     # since findContours alters the image
-    contours, hierarchy = cv2.findContours(edged,
+    contours, _ = cv2.findContours(edged,
         cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
     
     # Calculate 3D coordinates for each contour point
     laser_pos = 314  # x-coordinate of the laser position in the image
     focal_length = 3.04  # focal length of the camera used to capture the image
-    point_cloud = get_xyz(contours, laser_pos, focal_length)
+    point_cloud = get_xyz(contours[0], laser_pos, focal_length)
 
     # Add the resulting point cloud to the list
     point_clouds.append(point_cloud)
