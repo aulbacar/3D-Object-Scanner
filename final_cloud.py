@@ -5,7 +5,7 @@ import math
 # Define the parameters
 num_pcs = 23
 angle_offset =2*( math.pi / num_pcs ) # divide by the number of point clouds
-radius = 75.0  # distance from the center axis
+radius = 100.0  # distance from the center axis
 
 # Initialize the combined point cloud array
 combined_pc = np.empty((0, 3))
@@ -13,13 +13,13 @@ combined_pc = np.empty((0, 3))
 # Loop through each point cloud file and add the points to the combined point cloud
 for i in range(1, num_pcs+1):
     # Load the current point cloud
-    pc_path = f'point_clouds/pc{i}.xyz'
+    pc_path = f'shifted_clouds/pc{i}.xyz'
     pc = np.loadtxt(pc_path)
 
     # Apply the desired transformations
     x_offset = radius * math.cos(i * angle_offset)
-    z_offset = radius * math.sin(i * angle_offset)
-    y_offset = (i - 1) * 0.5  # adjust the z-axis offset as desired
+    y_offset = radius * math.sin(i * angle_offset)
+    z_offset = (i - 1) * 0.5  # adjust the z-axis offset as desired
     pc[:, 0] += x_offset
     pc[:, 1] += y_offset
     pc[:, 2] += z_offset
