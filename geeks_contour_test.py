@@ -52,4 +52,5 @@ cv2.imshow('Contours', image)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 
-print(x_coords)
+print(most_common_x1)
+print(most_common_x2)
