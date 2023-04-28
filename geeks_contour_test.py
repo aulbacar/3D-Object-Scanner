@@ -5,10 +5,10 @@ import numpy as np
 # Let's load a simple image with 3 black squares
 
 i = 0
-while(i < 25):
-    image = cv2.imread('Sample_Data/Laser_Bottle/test' + str(i) + '.jpg')
+#while(i < 25):
+    #image = cv2.imread('Sample_Data/Laser_Bottle/test' + str(i) + '.jpg')
 
-image = cv2.imread('Sample_Data/Keys_Lit/test23.jpg')
+image = cv2.imread('Sample_Data/Laser_Bottle/test23.jpg')
 cv2.waitKey(0)
   
 # Grayscale
