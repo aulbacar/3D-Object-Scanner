@@ -10,25 +10,44 @@ plt.imshow(th1, "gray")
 plt.show()
 
 #print(th1[448][308]) #[y coord][x coord]
-print(len(th1))
-print(len(th1[0]))
+#print(len(th1))
+#print(len(th1[0]))
 
 i = 0
 c = 0
+z = 0
 #i = len(th1)
 #c = (len(th1[0]))
 arr = []
 temp = []
+maxy = 0
+maxx = 0
 while(i < len(th1)):
     while(c < len(th1[0])):
         if(th1[i][c] == 255):
-            temp = [c, i]
+            if(i > maxy):
+                maxy = i
+                maxx = c
+            temp = [c, i, z]
             #arr.append(th1[i][c])
             arr.append(temp)
         c += 1
     c = 0
     i += 1
+#print(arr)
+
+i = 0
+while(i < len(arr)):
+    #print(arr[i][0])
+    arr[i][2] = maxx - arr[i][0]
+    i += 1
+
+print(maxy)
+print(maxx)
 print(arr)
+
+
+
 
 
 #for i in th1:
