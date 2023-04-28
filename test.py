@@ -28,7 +28,7 @@ while(i < len(th1)):
             if(i > maxy):
                 maxy = i
                 maxx = c
-            temp = [c, i, z]
+            temp = [c, z, i]
             #arr.append(th1[i][c])
             arr.append(temp)
         c += 1
@@ -39,13 +39,14 @@ while(i < len(th1)):
 i = 0
 while(i < len(arr)):
     #print(arr[i][0])
-    arr[i][2] = maxx - arr[i][0]
+    arr[i][1] = maxx - arr[i][0]
+    arr[i][0] = 1
     i += 1
 i = 0
 
 filter_arr = []
 while(i < len(arr)):
-    if(arr[i][2] > 0 and arr[i][2] < 150):
+    if(arr[i][1] > 0 and arr[i][1] < 150):
         filter_arr.append(arr[i])
     
     i += 1
