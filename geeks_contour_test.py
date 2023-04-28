@@ -33,6 +33,16 @@ x_coords = []
 for contour in contours:
     for point in contour:
         x_coords.append(point[0][0])
+        
+# Find the unique values and their counts
+unique_values, value_counts = np.unique(x_coords, return_counts=True)
+
+# Sort the counts in descending order and get the indices
+sorted_counts_indices = np.argsort(-value_counts)
+
+# Get the two most common values from the sorted indices
+most_common_x1 = unique_values[sorted_counts_indices[0]]
+most_common_x2 = unique_values[sorted_counts_indices[1]]
   
 # Draw all contours
 # -1 signifies drawing all contours
