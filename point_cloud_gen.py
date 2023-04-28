@@ -51,7 +51,7 @@ for i in range(num_images):
         cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
     
     # Calculate 3D coordinates for each contour point
-    laser_pos = ...  # x-coordinate of the laser position in the image
+    laser_pos = 314  # x-coordinate of the laser position in the image
     focal_length = 3.04  # focal length of the camera used to capture the image
     point_cloud = get_xyz(contours[i], laser_pos, focal_length)
 
