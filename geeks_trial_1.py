@@ -63,7 +63,7 @@ for i in range(1,50):
     # cv2.imwrite(f'contour_maps/contour_map_{i}.jpg', image)
     
     # Get point cloud from contour map
-    point_cloud = get_xyz(contours, 12.25, 50, 45, 30, 0.1)
+    point_cloud = get_xyz(edged, 12.25, 50, 45, 30, 0.1)
 
     # Add point cloud to list
     point_clouds.append(point_cloud)
