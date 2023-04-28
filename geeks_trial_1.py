@@ -11,7 +11,15 @@ def get_xyz(contour_img, radius, num_images, distance, laser_angle, pixel_to_dis
     image_angles = np.linspace(0, 360, num_images, endpoint=False)
 
     # Calculate the x and y coordinates of each point in the contour map
-    x_coords = contour_img[:,:,0] * pixel_to_distance_ratio
+    # x_coords = contour_img[:,:,0] * pixel_to_distance_ratio
+    if contour_img.ndim == 3:
+        x_coords = contour_img[:,:,0] * pixel_to_distance_ratio
+        y_coords = contour_img[:,:,1] * pixel_to_distance_ratio
+    elif contour_img.ndim == 2:
+        x_coords = contour_img[:,0] * pixel_to_distance_ratio
+        y_coords = contour_img[:,1] * pixel_to_distance_ratio
+    else:
+        raise ValueError(f"Invalid number of dimensions for contour_img: {contour_img.ndim}")
     y_coords = contour_img[:,:,1] * pixel_to_distance_ratio
 
     # Calculate the z coordinate of each point in the contour map
@@ -63,7 +71,7 @@ for i in range(1,50):
     # cv2.imwrite(f'contour_maps/contour_map_{i}.jpg', image)
     
     # Get point cloud from contour map
-    point_cloud = get_xyz(contours, 12.25, 50, 45, 30, 0.1)
+    point_cloud = get_xyz(edged, 12.25, 50, 45, 30, 0.1)
 
     # Add point cloud to list
     point_clouds.append(point_cloud)
