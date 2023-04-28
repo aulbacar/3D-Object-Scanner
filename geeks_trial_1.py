@@ -20,7 +20,7 @@ def get_xyz(contour_img, radius, num_images, distance, laser_angle, pixel_to_dis
         y_coords = contour_img[:,1] * pixel_to_distance_ratio
     else:
         raise ValueError(f"Invalid number of dimensions for contour_img: {contour_img.ndim}")
-    y_coords = contour_img[:,:,1] * pixel_to_distance_ratio
+    # y_coords = contour_img[:,:,1] * pixel_to_distance_ratio
 
     # Calculate the z coordinate of each point in the contour map
     z_coords = distance * np.cos(np.deg2rad(laser_angle)) - radius * np.sin(np.deg2rad(laser_angle)) - x_coords * np.sin(np.deg2rad(laser_angle))
@@ -47,8 +47,8 @@ def rotate_point_clouds(point_clouds, angle_degrees):
 
 point_clouds = []
 
-for i in range(1,50):
-    image = cv2.imread(f'Sample_Data/Keys_Lit/test{i}.jpg')
+for i in range(1,25):
+    image = cv2.imread(f'Sample_Data/Laser_Bottle/test{i}.jpg')
     cv2.waitKey(1)
 
     # Grayscale
@@ -77,8 +77,8 @@ for i in range(1,50):
     point_clouds.append(point_cloud)
 
     #print(contours)
-    cv2.imshow('Contours', image)
-    cv2.waitKey(0)
+    # cv2.imshow('Contours', image)
+    # cv2.waitKey(0)
 
 #get angle for rotaion via PCA
 pca = PCA()
@@ -99,8 +99,7 @@ point_cloud_combined = np.concatenate(rotated_point_clouds, axis=0)
 # Create Open3D point cloud
 pcd = o3d.geometry.PointCloud()
 pcd.points = o3d.utility.Vector3dVector(point_cloud_combined[:, :3])
-pcd.colors = o3d.utility.Vector3dVector(point_cloud_combined[:, 3:6] / 255)
-pcd.normals = o3d.utility.Vector3dVector(point_cloud_combined[:, 6:9])
+# pcd.normals = o3d.utility.Vector3dVector(point_cloud_combined[:, 6:9])
 
 # Visualize point cloud
 o3d.visualization.draw_geometries([pcd])
