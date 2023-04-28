@@ -4,9 +4,9 @@ import numpy as np
 
 # Let's load a simple image with 3 black squares
 
-i = 0
-#while(i < 25):
-    #image = cv2.imread('Sample_Data/Laser_Bottle/test' + str(i) + '.jpg')
+# i = 0
+# while(i < 25):
+#     image = cv2.imread('Sample_Data/Laser_Bottle/test' + str(i) + '.jpg')
 
 image = cv2.imread('Sample_Data/Laser_Bottle/test23.jpg')
 cv2.waitKey(0)
@@ -28,6 +28,11 @@ cv2.imshow('Canny Edges After Contouring', edged)
 cv2.waitKey(0)
   
 print("Number of Contours found = " + str(len(contours)))
+  
+x_coords = []
+for contour in contours:
+    for point in contour:
+        x_coords.append(point[0][0])
   
 # Draw all contours
 # -1 signifies drawing all contours
