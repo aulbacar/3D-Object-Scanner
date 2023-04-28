@@ -1,63 +1,38 @@
-import cv2
-import open3d as o3d
 import numpy as np
-
-num_images = 25
-
-def get_xyz(contours, laser_pos, focal_length):
-    """
-    Given a set of 2D contour points, calculates the corresponding 3D coordinates
-    based on the laser's deviation from the X-axis.
-    
-    Parameters:
-        contours (ndarray): An array of shape (N, 2) containing the (x, y) pixel coordinates
-                            of the contour points.
-        laser_pos (int): The x-coordinate of the laser position in the image.
-        focal_length (float): The focal length of the camera used to capture the image.
+import cv2 as cv
+from matplotlib import pyplot as plt
+from matplotlib import cm
+def toTuple(contour, x_arr, y_arr, inc):
+    i = 0
+    while(i < len(contour)):
+        testString = str(contour[i][0])
+        testString = testString.replace('[[', '')
+        testString = testString.replace(']]', '')
+        string_seperate = testString.split()
+        x_arr.append(int(string_seperate[0]))
+        y_arr.append(int(string_seperate[1]))
         
-    Returns:
-        An array of shape (N, 3) containing the (x, y, z) coordinates of the contour points.
-    """
-    # Calculate the distance between each contour point and the laser position
-    dists = contours[:, 0] - laser_pos
-    
-    # Calculate the corresponding depth (Z-coordinate) of each point
-    depths = dists * focal_length
-    
-    # Create an array of shape (N, 3) containing the (x, y, z) coordinates of each point
-    point_cloud = np.zeros((contours.shape[0], 3))
-    point_cloud[:, 0] = contours[:, 0][:, 0]  # x-coordinates (same as contour points)
-    point_cloud[:, 1] = contours[:, 1][:, 1]  # y-coordinates (same as contour points)
-    point_cloud[:, 2] = depths          # z-coordinates based on laser deviation from X-axis
-    
-    return point_cloud
+        ang_arr.append(inc * 15)
+        i += 1
 
-#main
-point_clouds = []
-for i in range(num_images):
-    image = cv2.imread(f'Sample_Data/Laser_Bottle/test{i}.jpg')
-    cv2.waitKey(1)
+   
 
-    # Grayscale
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+i = 0
+x_arr = []
+y_arr = []
+ang_arr = []
+contour_array = []
+while(i < 25):
+    image = cv.imread('Sample_Data/Laser_Bottle/test' + str(i) + '.jpg')
 
-    # Find Canny edges
-    edged = cv2.Canny(gray, 30, 200)
+    assert image is not None, "file could not be read, check with os.path.exists()"
+    gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+    ret, thresh = cv.threshold(gray, 127, 255, 0)
+    contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+    cv.imshow('Canny Edges After Contouring', thresh)
+    cv.imshow('Contours', image)
 
-    # Finding Contours
-    # Use a copy of the image e.g. edged.copy()
-    # since findContours alters the image
-    contours, _ = cv2.findContours(edged,
-        cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-    
-    # Calculate 3D coordinates for each contour point
-    laser_pos = 314  # x-coordinate of the laser position in the image
-    focal_length = 3.04  # focal length of the camera used to capture the image
-    point_cloud = get_xyz(contours[0], laser_pos, focal_length)
+    toTuple(contours, x_arr, y_arr, i)
 
-    # Add the resulting point cloud to the list
-    point_clouds.append(point_cloud)
-
-pcd = o3d.geometry.PointCloud()
-pcd.points = o3d.utility.Vector3dVector(point_clouds[0])
-o3d.visualization.draw_geometries([pcd])
+    cv.waitKey(0)
+    i += 1
