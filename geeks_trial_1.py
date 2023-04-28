@@ -1,7 +1,8 @@
 import cv2
 import open3d as o3d
 import numpy as np
-
+from sklearn.decomposition import PCA
+#12.25 cm radius
 # Let's load a simple image with 3 black squares
 import numpy as np
 
@@ -21,11 +22,11 @@ def get_xyz(contour_img, radius, num_images, distance, laser_angle, pixel_to_dis
 
     return point_cloud
 
-def rotate_point_clouds(point_clouds, angle_degrees, rotation_axis):
+def rotate_point_clouds(point_clouds, angle_degrees):
     # Convert angle to radians
     angle = np.deg2rad(angle_degrees)
 
-    # Create rotation matrix
+    # Create rotation matrix around z-axis
     rotation_matrix = np.array([[np.cos(angle), -np.sin(angle), 0], [np.sin(angle), np.cos(angle), 0], [0, 0, 1]])
 
     # Rotate each point cloud
@@ -62,7 +63,7 @@ for i in range(1,50):
     # cv2.imwrite(f'contour_maps/contour_map_{i}.jpg', image)
     
     # Get point cloud from contour map
-    point_cloud = get_xyz(image, 5, 50, 15, 30, 0.1)
+    point_cloud = get_xyz(contours, 12.25, 50, 45, 30, 0.1)
 
     # Add point cloud to list
     point_clouds.append(point_cloud)
@@ -71,8 +72,18 @@ for i in range(1,50):
     cv2.imshow('Contours', image)
     cv2.waitKey(0)
 
+#get angle for rotaion via PCA
+pca = PCA()
+pca.fit(point_clouds[0])
+
+# get the third principal component
+pc3 = pca.components_[2]
+
+# calculate the angle between pc3 and the z-axis
+angle = np.arccos(pc3[2])
+
 # Rotate each point cloud and add to list
-rotated_point_clouds = rotate_point_clouds(point_clouds, 360, 3)
+rotated_point_clouds = rotate_point_clouds(point_clouds, angle)
 
 # Combine all point clouds into one larger point cloud
 point_cloud_combined = np.concatenate(rotated_point_clouds, axis=0)
