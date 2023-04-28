@@ -27,7 +27,7 @@ def get_xyz(contours, laser_pos, focal_length):
     # Create an array of shape (N, 3) containing the (x, y, z) coordinates of each point
     point_cloud = np.zeros((contours.shape[0], 3))
     point_cloud[:, 0] = contours[:, 0][:, 0]  # x-coordinates (same as contour points)
-    point_cloud[:, 1] = contours[:, 1]  # y-coordinates (same as contour points)
+    point_cloud[:, 1] = contours[:, 1][:, 1]  # y-coordinates (same as contour points)
     point_cloud[:, 2] = depths          # z-coordinates based on laser deviation from X-axis
     
     return point_cloud
