@@ -57,3 +57,5 @@ for i in range(num_images):
 
     # Add the resulting point cloud to the list
     point_clouds.append(point_cloud)
+
+print(point_clouds)
