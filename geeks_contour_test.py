@@ -8,14 +8,16 @@ from matplotlib import pyplot as plt
 image = cv2.imread('Sample_Data/Laser_Bottle/test1.jpg')
 hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     
-lower_red = np.array([175,50,20])
-upper_red = np.array([180,255,255])
-mask = cv2.inRange(hsv, lower_red, upper_red)
-res = cv2.bitwise_and(image,image, mask= mask)
-cv2.imshow('frame',image)
-cv2.imshow('mask',mask)
-cv2.imshow('res',res)
+#lower_red = np.array([175,50,20])
+#upper_red = np.array([180,255,255])
+#mask = cv2.inRange(hsv, lower_red, upper_red)
+#res = cv2.bitwise_and(image,image, mask= mask)
+#cv2.imshow('frame',image)
+#cv2.imshow('mask',mask)
+#cv2.imshow('res',res)
 
+mask2 = cv2.inRange(hsv, 180, 400)
+cv2.imshow(mask2)
 
 i = 0
 while(i < 1):
