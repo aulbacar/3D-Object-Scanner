@@ -96,12 +96,18 @@ rotated_point_clouds = rotate_point_clouds(point_clouds, angle)
 # Combine all point clouds into one larger point cloud
 point_cloud_combined = np.concatenate(rotated_point_clouds, axis=0)
 
+# Create Open3D window
+# o3d.visualization.webrtc_server.enable_webrtc()
+# o3d.visualization.webrtc_server.disable()
+
 # Create Open3D point cloud
 pcd = o3d.geometry.PointCloud()
 pcd.points = o3d.utility.Vector3dVector(point_cloud_combined[:, :3])
-# pcd.normals = o3d.utility.Vector3dVector(point_cloud_combined[:, 6:9])
 
 # Visualize point cloud
+# vis.add_geometry(pcd)
+# vis.run()
+# vis.destroy_window()
 o3d.visualization.draw_geometries([pcd])
 
-cv2.destroyAllWindows()
+# cv2.destroyAllWindows()
