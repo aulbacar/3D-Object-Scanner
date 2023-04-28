@@ -41,3 +41,5 @@ cv2.drawContours(image, contours, -1, (0, 255, 0), 3)
 cv2.imshow('Contours', image)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+
+print(x_coords)
