@@ -25,10 +25,10 @@ def get_xyz(contours, laser_pos, focal_length):
     depths = dists * focal_length
     
     # Create an array of shape (N, 3) containing the (x, y, z) coordinates of each point
-    points_3d = np.zeros((contours.shape[0], 3))
-    points_3d[:, 0] = contours[:, 0]  # x-coordinates (same as contour points)
-    points_3d[:, 1] = contours[:, 1]  # y-coordinates (same as contour points)
-    points_3d[:, 2] = depths          # z-coordinates based on laser deviation from X-axis
+    point_cloud = np.zeros((contours.shape[0], 3))
+    point_cloud[:, 0] = contours[:, 0]  # x-coordinates (same as contour points)
+    point_cloud[:, 1] = contours[:, 1]  # y-coordinates (same as contour points)
+    point_cloud[:, 2] = depths          # z-coordinates based on laser deviation from X-axis
     
     return point_cloud
 
@@ -53,7 +53,11 @@ for i in range(num_images):
     # Calculate 3D coordinates for each contour point
     laser_pos = 314  # x-coordinate of the laser position in the image
     focal_length = 3.04  # focal length of the camera used to capture the image
-    point_cloud = get_xyz(contours[i], laser_pos, focal_length)
+    point_cloud = get_xyz(contours, laser_pos, focal_length)
 
     # Add the resulting point cloud to the list
     point_clouds.append(point_cloud)
+
+pcd = o3d.geometry.PointCloud()
+pcd.points = o3d.utility.Vector3dVector(point_clouds[0])
+o3d.visualization.draw_geometries([pcd])
