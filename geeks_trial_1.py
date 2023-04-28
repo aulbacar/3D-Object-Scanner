@@ -80,7 +80,7 @@ for i in range(1,25):
     #print(contours)
     # cv2.imshow('Contours', image)
     # cv2.waitKey(0)
-
+# print(point_clouds)
 #get angle for rotaion via PCA
 pca = PCA()
 pca.fit(point_clouds[0])
@@ -96,19 +96,16 @@ rotated_point_clouds = rotate_point_clouds(point_clouds, angle)
 
 # Combine all point clouds into one larger point cloud
 point_cloud_combined = np.concatenate(rotated_point_clouds, axis=0)
-
-# Create Open3D window
-# o3d.visualization.webrtc_server.enable_webrtc()
-# o3d.visualization.webrtc_server.disable()
-
+np.savetxt('test.txt', point_cloud_combined)
+# input_path = 'Sample_Data/the_researcher_desk.xyz'
+# pc = np.loadtxt(input_path,skiprows=1)
+# o3d.io.write_point_cloud("point_ploud.xyz", point_cloud_combined)
 # Create Open3D point cloud
 pcd = o3d.geometry.PointCloud()
+# pcd.points = o3d.utility.Vector3dVector(pc[:, :3])
 pcd.points = o3d.utility.Vector3dVector(point_cloud_combined[:, :3])
 
-# Visualize point cloud
-# vis.add_geometry(pcd)
-# vis.run()
-# vis.destroy_window()
+
 o3d.visualization.draw_geometries([pcd])
 
 # cv2.destroyAllWindows()
