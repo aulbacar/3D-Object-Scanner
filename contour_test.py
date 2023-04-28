@@ -23,17 +23,22 @@ y_arr = []
 #z_arr = []
 ang_arr = []
 contour_array = []
-while(i < 25):
-    image = cv.imread('Sample_Data/Laser_Bottle/test' + str(i) + '.jpg')
+while(i < 1):
+    #image = cv.imread('Sample_Data/Laser_Bottle/test' + str(i) + '.jpg')
+    image = cv.imread('Sample_Data/Laser_Bottle/test1.jpg')
     #cv.waitKey(0)
     assert image is not None, "file could not be read, check with os.path.exists()"
     gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
     ret, thresh = cv.threshold(gray, 127, 255, 0)
     contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
-    cv.imshow('Canny Edges After Contouring', thresh)
-    cv.imshow('Contours', image)
+    #cv.imshow('Canny Edges After Contouring', thresh)
+    #plt.show()
+    #cv.imshow('Contours', image)
+    print(contours)
+    plt.imshow(thresh)
+    plt.show()
     #print(contours)
-    toTuple(contours, x_arr, y_arr, i)
+    #toTuple(contours, x_arr, y_arr, i)
     #print(x_arr)
     #print(y_arr)
     #print(t2)

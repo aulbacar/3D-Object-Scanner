@@ -1,15 +1,32 @@
 import cv2
 import open3d as o3d
 import numpy as np
+from matplotlib import pyplot as plt
 
 # Let's load a simple image with 3 black squares
 
-# i = 0
-# while(i < 25):
-#     image = cv2.imread('Sample_Data/Laser_Bottle/test' + str(i) + '.jpg')
+image = cv2.imread('Sample_Data/Laser_Bottle/test1.jpg')
+hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    
+lower_red = np.array([175,50,20])
+upper_red = np.array([180,255,255])
+mask = cv2.inRange(hsv, lower_red, upper_red)
+res = cv2.bitwise_and(image,image, mask= mask)
+cv2.imshow('frame',image)
+cv2.imshow('mask',mask)
+cv2.imshow('res',res)
 
-image = cv2.imread('Sample_Data/Laser_Bottle/test23.jpg')
+
+i = 0
+while(i < 1):
+     image = cv2.imread('Sample_Data/Laser_Bottle/test' + str(i) + '.jpg')
+     i += 1
+
+
+
+
 cv2.waitKey(0)
+
   
 # Grayscale
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -23,9 +40,13 @@ cv2.waitKey(0)
 # since findContours alters the image
 contours, hierarchy = cv2.findContours(edged, 
     cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-  
+
+print(contours)
+plt.imshow(edged)
+plt.show()  
 cv2.imshow('Canny Edges After Contouring', edged)
 cv2.waitKey(0)
+
   
 print("Number of Contours found = " + str(len(contours)))
   
