@@ -18,6 +18,7 @@ hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
 mask2 = cv2.inRange(hsv, 180, 400)
 cv2.imshow(mask2)
+cv2.threshold
 
 i = 0
 while(i < 1):
