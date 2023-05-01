@@ -5,8 +5,8 @@ import math
 from matplotlib import pyplot as plt
 from collections import Counter
 theta = 0.8726646
-for img_no in range(2,125):
-    img = cv.imread(f'Sample_Data/box/test2.jpg', cv.IMREAD_GRAYSCALE)
+for img_no in range(2,124):
+    img = cv.imread(f'Sample_Data/box/test{img_no}.jpg', cv.IMREAD_GRAYSCALE)
     assert img is not None, "file could not be read, check with os.path.exists()"
 
     ret,th1 = cv.threshold(img,200,255,cv.THRESH_BINARY)
@@ -99,12 +99,12 @@ for img_no in range(2,125):
     x_avg = 0
     for x in xval:
         x_avg += x
-    x_avg = x_avg/(len(xval))
+        x_avg = x_avg/(len(xval))
 
     y_avg = 0
     for y in yval:
         y_avg += y
-    y_avg = y_avg/(len(yval))
+        y_avg = y_avg/(len(yval))
 
     min_num_x = int(x_avg) - 20
     min_num_y = int(y_avg) - 20
@@ -141,11 +141,11 @@ for img_no in range(2,125):
     midpoint = (mid_x, mid_y)
     # print(midpoint)
 
-    # for i in range(len(arr)):
-    #     x, y, z = arr[i]
-    #     x = x - midpoint[0]
-    #     y = y - midpoint[1]
-    #     arr[i] = [x, y, z]
+    for i in range(len(arr)):
+        x, y, z = arr[i]
+        x = x - midpoint[0]
+        y = y - midpoint[1]
+        arr[i] = [x, y, z]
 
     ##################################################################################################################
     x_axis = [(i, 0, 0) for i in range(0,200)]
@@ -155,13 +155,13 @@ for img_no in range(2,125):
     pre_pc = np.array(arr)
     axes = np.array(x_axis + y_axis + z_axis)
 
-    np.savetxt(f'rotate_tests/rotate2.xyz', pre_pc, delimiter=' ')
+    np.savetxt(f'rotate_tests/rotate{img_no}.xyz', pre_pc, delimiter=' ')
     np.savetxt(f'rotate_tests/axes.xyz', axes, delimiter=' ')
 
     input_path1= f'rotate_tests/axes.xyz'
     point_cloud1= np.loadtxt(input_path1,skiprows=0)
 
-    input_path2= f'rotate_tests/rotate2.xyz'
+    input_path2= f'rotate_tests/rotate{img_no}.xyz'
     point_cloud2= np.loadtxt(input_path2,skiprows=0)
     pcd1 = o3d.geometry.PointCloud()
     pcd1.points = o3d.utility.Vector3dVector(point_cloud1[:,:3])
@@ -169,7 +169,7 @@ for img_no in range(2,125):
     pcd2 = o3d.geometry.PointCloud()
     pcd2.points = o3d.utility.Vector3dVector(point_cloud2[:,:3])
     # if(img_no != 1):
-    theta += 0.1396263  # 45 degrees
+    theta += 0.273  # 45 degrees
     rot_z = np.array([[np.cos(theta), -np.sin(theta), 0],
                     [np.sin(theta), np.cos(theta), 0],
                     [0, 0, 1]])
@@ -178,9 +178,9 @@ for img_no in range(2,125):
     pcd2.rotate(rot_z)
 
     rotated_pc = np.asarray(pcd2.points)
-    # print(img_no)
+    print(img_no)
     # Save the rotated point cloud to a file
-    output_path = f"transformed/rotated_point_cloud2.xyz"
+    output_path = f"transformed/rotated_point_cloud{img_no}.xyz"
     np.savetxt(output_path, rotated_pc, delimiter=" ")
 
-    #o3d.visualization.draw_geometries([pcd1, pcd2])
+    # o3d.visualization.draw_geometries([pcd1, pcd2]) 

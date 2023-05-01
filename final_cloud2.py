@@ -4,8 +4,8 @@ import math
 import pyvista as pv
 
 # Define the parameters
-num_pcs = 23
-angle_offset = math.pi / 24  # divide by the number of point clouds
+num_pcs = 123
+angle_offset = 6.28 / num_pcs  # divide by the number of point clouds
 radius = 15 # distance from the center axis
 
 # Initialize the combined point cloud array
@@ -37,10 +37,10 @@ y_axis = [(0, i, 0) for i in range(0,300)]
 z_axis = [(0, 0, i) for i in range(0,600)]
 axes = np.array(x_axis + y_axis + z_axis)
 
-point_cloud = pv.PolyData(combined_pc)
-point_cloud.plot(render_points_as_spheres=True)
+#point_cloud = pv.PolyData(combined_pc)
+#point_cloud.plot(render_points_as_spheres=True)
 
-# cloud = pv.PolyData(combined_pc)
-# cloud.plot(point_size=15)
+cloud = pv.PolyData(combined_pc)
+cloud.plot(point_size=15)
 # surf = cloud.delaunay_2d()
 # surf.plot(show_edges=True)
