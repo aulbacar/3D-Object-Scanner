@@ -5,7 +5,7 @@ import math
 from matplotlib import pyplot as plt
 from collections import Counter
 
-img = cv.imread(f'Sample_Data/Laser_Bottle/test0.jpg', cv.IMREAD_GRAYSCALE)
+img = cv.imread(f'Sample_Data/Laser_Bottle/test1.jpg', cv.IMREAD_GRAYSCALE)
 assert img is not None, "file could not be read, check with os.path.exists()"
 
 ret,th1 = cv.threshold(img,200,255,cv.THRESH_BINARY)
@@ -83,33 +83,42 @@ while(i < len(filter_arr)):
     c = 0
     i += 1
     
-# arr = straight_filter_arr
-# x_values = [coord[0] for coord in arr]
-# y_values = [coord[1] for coord in arr]
-# x_counts = Counter(x_values)
-# y_counts = Counter(y_values)
-# min_num_x = 240
-# min_num_y = 130
-# most_common_x = [(x, count) for x, count in x_counts.items() if count >= min_num_x]
-# most_common_y = [(y, count) for y, count in y_counts.items() if count >= min_num_y]
+arr = straight_filter_arr
+x_values = [coord[0] for coord in arr]
+y_values = [coord[1] for coord in arr]
+x_counts = Counter(x_values)
+y_counts = Counter(y_values)
+min_num_x = 240
+min_num_y = 130
+most_common_x = [(x, count) for x, count in x_counts.items() if count >= min_num_x]
+most_common_y = [(y, count) for y, count in y_counts.items() if count >= min_num_y]
 
+x_min = min([x[0] for x in most_common_x])
+x_max = max([x[0] for x in most_common_x])
+y_min = min([y[0] for y in most_common_y])
+y_max = max([y[0] for y in most_common_y])
 
-# # Initialize the highest x, lowest y coordinate and the lowest x, highest y coordinate
-# highest_x_lowest_y = None
-# lowest_x_highest_y = None
+highest_x_lowest_y = arr[0]
+lowest_x_highest_y = arr[0]
 
-# # Loop through the coordinates and compare each coordinate's x and y values with the most common x and y values
-# for coord in coordinates:
-#     x, y, z = coord
-#     if x == most_common_x and (not highest_x_lowest_y or y < highest_x_lowest_y[1]):
-#         highest_x_lowest_y = coord
-#     elif y == most_common_y and (not lowest_x_highest_y or x < lowest_x_highest_y[0]):
-#         lowest_x_highest_y = coord
-
-# # Print the results
-# print("Highest x, lowest y coordinate:", highest_x_lowest_y)
-# print("Lowest x, highest y coordinate:", lowest_x_highest_y)
+# Loop through the coordinates and compare each coordinate's x and y values with the most common x and y values
+for coord in arr:
+    x, y, z = coord
+    if x == x_max and (y > lowest_x_highest_y[1]):
+        lowest_x_highest_y = coord
+    elif x == x_min and (y < highest_x_lowest_y[1]):
+        highest_x_lowest_y = coord
+        
+mid_x = int((highest_x_lowest_y[0] + lowest_x_highest_y[0]) / 2)
+mid_y = int((highest_x_lowest_y[1] + lowest_x_highest_y[1]) / 2)
+midpoint = (mid_x, mid_y)
+# print(midpoint)
     
+for i in range(len(arr)):
+    x, y, z = arr[i]
+    x = x - midpoint[0]
+    y = y - midpoint[1]
+    arr[i] = [x, y, z]
 
 ##################################################################################################################
 x_axis = [(i, 0, 0) for i in range(0,200)]
@@ -117,7 +126,7 @@ y_axis = [(0, i, 0) for i in range(0,300)]
 z_axis = [(0, 0, i) for i in range(0,600)]
 
 prev_arr = straight_filter_arr
-final_arr = np.array(prev_arr)
+final_arr = np.array(arr)
 p = 2 * math.pi * 20 / 180
 for i in range(len(final_arr)):
     x = final_arr[i, 0] * np.sin(p) + final_arr[i, 1] * np.sin(p)
