@@ -3,7 +3,7 @@ import open3d as o3d
 import numpy as np
 from matplotlib import pyplot as plt
 for img_no in range(2,125):
-    img = cv.imread(f'Sample_Data/round_bot/test{img_no}.jpg', cv.IMREAD_GRAYSCALE)
+    img = cv.imread(f'Sample_Data/box/test{img_no}.jpg', cv.IMREAD_GRAYSCALE)
     assert img is not None, "file could not be read, check with os.path.exists()"
 
     ret,th1 = cv.threshold(img,220,255,cv.THRESH_BINARY)
@@ -33,15 +33,15 @@ for img_no in range(2,125):
     i = 0
     while(i < len(arr)):
         arr[i][1] = maxx - arr[i][0]
-        #arr[i][0] = 1
+        arr[i][0] = 1
         i += 1
     i = 0
 
-    while(i < len(arr)):
-        arr[i][0] = 1
+    #while(i < len(arr)):
         #arr[i][0] = 1
-        i += 1
-    i = 0
+        #arr[i][0] = 1
+        #i += 1
+    #i = 0
 
     arrx = []
     arry = []
