@@ -3,10 +3,10 @@ import open3d as o3d
 import numpy as np
 from matplotlib import pyplot as plt
 for img_no in range(2,125):
-    img = cv.imread(f'Sample_Data/glue/test{img_no}.jpg', cv.IMREAD_GRAYSCALE)
+    img = cv.imread(f'Sample_Data/bottle/test{img_no}.jpg', cv.IMREAD_GRAYSCALE)
     assert img is not None, "file could not be read, check with os.path.exists()"
 
-    ret,th1 = cv.threshold(img,200,255,cv.THRESH_BINARY)
+    ret,th1 = cv.threshold(img,220,255,cv.THRESH_BINARY)
 
 
     i = 0
@@ -57,9 +57,9 @@ for img_no in range(2,125):
         i += 1
 
     i = 0
-    while(i < len(filter_arr)):
-        filter_arr[i][0] = 0
-        i += 1
+    #while(i < len(filter_arr)):
+        #filter_arr[i][0] = 0
+        #i += 1
     i = 1
     c = 0
 
