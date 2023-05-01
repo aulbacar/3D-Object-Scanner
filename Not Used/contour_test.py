@@ -25,7 +25,7 @@ ang_arr = []
 contour_array = []
 while(i < 1):
     #image = cv.imread('Sample_Data/Laser_Bottle/test' + str(i) + '.jpg')
-    image = cv.imread('Sample_Data/Laser_Bottle/test1.jpg')
+    image = cv.imread('Sample_Data/Object/test2.jpg')
     #cv.waitKey(0)
     assert image is not None, "file could not be read, check with os.path.exists()"
     gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)

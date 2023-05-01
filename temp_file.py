@@ -5,8 +5,8 @@ import math
 from matplotlib import pyplot as plt
 from collections import Counter
 theta = 0.8726646
-for img_no in range(1,24):
-    img = cv.imread(f'Sample_Data/Laser_Bottle/test{img_no}.jpg', cv.IMREAD_GRAYSCALE)
+for img_no in range(2,125):
+    img = cv.imread(f'Sample_Data/Object/test{img_no}.jpg', cv.IMREAD_GRAYSCALE)
     assert img is not None, "file could not be read, check with os.path.exists()"
 
     ret,th1 = cv.threshold(img,200,255,cv.THRESH_BINARY)
@@ -141,11 +141,11 @@ for img_no in range(1,24):
     midpoint = (mid_x, mid_y)
     # print(midpoint)
         
-    for i in range(len(arr)):
-        x, y, z = arr[i]
-        x = x - midpoint[0]
-        y = y - midpoint[1]
-        arr[i] = [x, y, z]
+    # for i in range(len(arr)):
+    #     x, y, z = arr[i]
+    #     x = x - midpoint[0]
+    #     y = y - midpoint[1]
+    #     arr[i] = [x, y, z]
 
     ##################################################################################################################
     x_axis = [(i, 0, 0) for i in range(0,200)]
@@ -169,7 +169,7 @@ for img_no in range(1,24):
     pcd2 = o3d.geometry.PointCloud()
     pcd2.points = o3d.utility.Vector3dVector(point_cloud2[:,:3])
     # if(img_no != 1):
-    theta += 0.273  # 45 degrees
+    theta += 0.1396263  # 45 degrees
     rot_z = np.array([[np.cos(theta), -np.sin(theta), 0],
                     [np.sin(theta), np.cos(theta), 0],
                     [0, 0, 1]])

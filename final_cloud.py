@@ -3,8 +3,8 @@ import open3d as o3d
 import math
 
 # Define the parameters
-num_pcs = 23
-angle_offset =2*( math.pi / num_pcs ) # divide by the number of point clouds
+num_pcs = 122
+angle_offset = math.pi / num_pcs # divide by the number of point clouds
 radius = 15 # distance from the center axis
 
 # Initialize the combined point cloud array

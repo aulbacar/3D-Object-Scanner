@@ -1,10 +1,11 @@
 import numpy as np
 import open3d as o3d
 import math
+import pyvista as pv
 
 # Define the parameters
 num_pcs = 23
-angle_offset =2*( math.pi / num_pcs ) # divide by the number of point clouds
+angle_offset = math.pi / 24  # divide by the number of point clouds
 radius = 15 # distance from the center axis
 
 # Initialize the combined point cloud array
@@ -12,7 +13,7 @@ combined_pc = np.empty((0, 3))
 x_offset = 0
 y_offset = 0
 # Loop through each point cloud file and add the points to the combined point cloud
-for i in range(1, num_pcs+1):
+for i in range(2, num_pcs+1):
     # Load the current point cloud
     pc_path = f'transformed/rotated_point_cloud{i}.xyz'
     pc = np.loadtxt(pc_path)
@@ -36,19 +37,10 @@ y_axis = [(0, i, 0) for i in range(0,300)]
 z_axis = [(0, 0, i) for i in range(0,600)]
 axes = np.array(x_axis + y_axis + z_axis)
 
-np.savetxt('combined_pc.xyz', combined_pc, delimiter=' ')
-np.savetxt(f'rotate_tests/axes.xyz', axes, delimiter=' ')
+point_cloud = pv.PolyData(combined_pc)
+point_cloud.plot(render_points_as_spheres=True)
 
-input_path= "combined_pc.xyz"
-input_path1= 'rotate_tests/axes.xyz'
-
-point_cloud= np.loadtxt(input_path,skiprows=0)
-point_cloud1= np.loadtxt(input_path1,skiprows=0)
-
-pcd = o3d.geometry.PointCloud()
-pcd.points = o3d.utility.Vector3dVector(point_cloud[:,:3])
-
-pcd1 = o3d.geometry.PointCloud()
-pcd1.points = o3d.utility.Vector3dVector(point_cloud1[:,:3])
-
-o3d.visualization.draw_geometries([pcd, pcd1])
+# cloud = pv.PolyData(combined_pc)
+# cloud.plot(point_size=15)
+# surf = cloud.delaunay_2d()
+# surf.plot(show_edges=True)
