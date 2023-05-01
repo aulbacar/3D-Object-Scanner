@@ -5,14 +5,14 @@ import pyvista as pv
 
 # Define the parameters
 num_pcs = 23
-angle_offset = (.05) # divide by the number of point clouds
+angle_offset = (.5) # divide by the number of point clouds
 #radius = 100.0  # distance from the center axis
 
 # Initialize the combined point cloud array
 combined_pc = np.empty((0, 3))
 
 # Loop through each point cloud file and add the points to the combined point cloud
-for i in range(1, 24):
+for i in range(2, 124):
     # Load the current point cloud
     pc_path = f'shifted_clouds/pc{i}.xyz'
     pc = np.loadtxt(pc_path)
