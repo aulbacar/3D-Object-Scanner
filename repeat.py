@@ -4,9 +4,10 @@ import numpy as np
 from matplotlib import pyplot as plt
 import pyvista as pv
 import math
+import trimesh
 
 
-image = cv.imread('new_data/cards/test/cal.jpg') #find contours to set y limits on important points
+image = cv.imread('new_data/square_bottle/test/cal.jpg') #find contours to set y limits on important points
 gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
 ret, thresh = cv.threshold(gray, 127, 255, 0)
 contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
@@ -31,11 +32,11 @@ print(miny)
 
 ct = 0
 combined_pc = np.empty((0, 3))
-angle_offset = .05
+angle_offset = .05027
 x_offset = 0
 y_offset = 0
-for img_no in range(0,124):
-    img = cv.imread(f'new_data/cards/test/test{img_no}.jpg', cv.IMREAD_GRAYSCALE)
+for img_no in range(0, 124):
+    img = cv.imread(f'new_data/square_bottle/test/test{img_no}.jpg', cv.IMREAD_GRAYSCALE)
     assert img is not None, "file could not be read, check with os.path.exists()"
 
     ret,th1 = cv.threshold(img,210,255,cv.THRESH_BINARY) #filtering image by brightness
@@ -221,9 +222,33 @@ for img_no in range(0,124):
     #pcd.points = o3d.utility.Vector3dVector(pc[:,:3])
     #o3d.visualization.draw_geometries([pcd])
 points = combined_pc
-cloud = pv.PolyData(points) #the point cloud from combining the rotated slices
-cloud.plot(point_size=2)
-surf = cloud.delaunay_2d()
-surf.plot(show_edges=True)
-surf.save('mesh.stl') #the printable mesh file
+
+#cloud = pv.PolyData(points) #the point cloud from combining the rotated slices
+#cloud.plot(point_size=2)
+#surf = cloud.delaunay_2d()
+
+
+pcd = o3d.geometry.PointCloud()
+pcd.points = o3d.utility.Vector3dVector(combined_pc[:,:3])
+o3d.visualization.draw_geometries([pcd])
+
+
+# estimate radius for rolling ball
+pcd.estimate_normals()
+
+# to obtain a consistent normal orientation
+pcd.orient_normals_towards_camera_location(pcd.get_center())
+
+# or you might want to flip the normals to make them point outward, not mandatory
+pcd.normals = o3d.utility.Vector3dVector( - np.asarray(pcd.normals))
+
+# surface reconstruction using Poisson reconstruction
+mesh, _ = o3d.geometry.TriangleMesh.create_from_point_cloud_poisson(pcd, depth=4)
+
+# paint uniform color to better visualize, not mandatory
+mesh.paint_uniform_color(np.array([0.7, 0.7, 0.7]))
+
+o3d.io.write_triangle_mesh('a.ply', mesh)
+#surf.plot(show_edges=True)
+#surf.save('mesh.stl') #the printable mesh file
 #np.savetxt(f'combinedpc.xyz')
