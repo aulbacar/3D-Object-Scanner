@@ -6,7 +6,7 @@ import pyvista as pv
 import math
 
 
-image = cv.imread('Sample_Data/box/cal.jpg')
+image = cv.imread('new_data/cards/test/cal.jpg') #find contours to set y limits on important points
 gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
 ret, thresh = cv.threshold(gray, 127, 255, 0)
 contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
@@ -17,9 +17,9 @@ miny = 480
 
 i = 0
 while(i < len(contours)):
-    if(contours[i][1] < miny):
-        miny = contours[i][1]
-    #print(contours[i][1])
+    if(contours[i][1] < miny): #finding first bright point(illuminated by laser)
+        miny = contours[i][1]  #then going down the line until there is a dark spot
+    #print(contours[i][1])     #to cut out the laser above the object
     #print("test", contours[1][1])
     #print(c)
     #print(maxx)
@@ -34,11 +34,11 @@ combined_pc = np.empty((0, 3))
 angle_offset = .05
 x_offset = 0
 y_offset = 0
-for img_no in range(2,124):
-    img = cv.imread(f'Sample_Data/box/test{img_no}.jpg', cv.IMREAD_GRAYSCALE)
+for img_no in range(0,124):
+    img = cv.imread(f'new_data/cards/test/test{img_no}.jpg', cv.IMREAD_GRAYSCALE)
     assert img is not None, "file could not be read, check with os.path.exists()"
 
-    ret,th1 = cv.threshold(img,210,255,cv.THRESH_BINARY)
+    ret,th1 = cv.threshold(img,210,255,cv.THRESH_BINARY) #filtering image by brightness
 
 
     i = 0
@@ -77,14 +77,14 @@ for img_no in range(2,124):
     #print(miny)
     i = 0
     c = 0
-    while(i < len(th1)):
+    while(i < len(th1)): #finds x coordinate where bottom reference laser is shining
         while(c < len(th1[0])):
            if(th1[i][c] == 255):
                 if(i > max):
-                    max = 640 - c#(c + 200)
+                    max = 640 - c#(c + 200) 
                     scale = int(max * .2)
-                    maxx = 640 - (c - (scale))
-                    maxy = i
+                    maxx = 640 - (c - (scale)) #image is 640 pixels wide, c is the x value (the loop condition is kind of weird)
+                    maxy = i                   #the scalar is there because I found that it gives objects better definition
                     #print(c)
            c += 1
         #print(c)
@@ -98,7 +98,7 @@ for img_no in range(2,124):
 
     i = 0
     c = 0
-    while(i < len(th1)):
+    while(i < len(th1)): #going through all pixels detected by brightness
         while(c < len(th1[0])):
             if(th1[i][c] == 255):
                 #if(i > maxy):
@@ -112,10 +112,10 @@ for img_no in range(2,124):
                 #arr.append(temp)
                 #temp = [0, maxx - c, i]
                 
-                if(i < 440 and i > miny): #110 for bottle
-                    temp = [0, maxx-c, i]
-                    arr.append(temp)
-            
+                if(i < 440 and i > miny): #440 is the bottom laser height
+                    temp = [0, maxx-c, i] #x is 0 so the object is rotating around the same area
+                    arr.append(temp)      #the depth is based on the x pixel value with reference to where
+                                          #the bottom laser (reference laser) is
             
             #arr[i][1] = maxx - arr[i][0]
            
@@ -201,6 +201,7 @@ for img_no in range(2,124):
     #pc[:, 0] = pc[:, 0] * x_offset - pc[:, 1] * y_offset
     #pc[:, 1] = pc[:, 1] * x_offset + pc[:, 0] * y_offset
 
+    #as each slice is found it is rotated .05 radians * the image number around the z-axis
     rotation_axis = np.array([0, 0, 1])  # rotate around the y-axis
     rotation_angle = img_no * angle_offset  # adjust the rotation angle as desired
     rotation_matrix = o3d.geometry.get_rotation_matrix_from_axis_angle(rotation_axis*rotation_angle)
@@ -220,9 +221,9 @@ for img_no in range(2,124):
     #pcd.points = o3d.utility.Vector3dVector(pc[:,:3])
     #o3d.visualization.draw_geometries([pcd])
 points = combined_pc
-cloud = pv.PolyData(points)
+cloud = pv.PolyData(points) #the point cloud from combining the rotated slices
 cloud.plot(point_size=2)
 surf = cloud.delaunay_2d()
 surf.plot(show_edges=True)
-surf.save('mesh.stl')
+surf.save('mesh.stl') #the printable mesh file
 #np.savetxt(f'combinedpc.xyz')
