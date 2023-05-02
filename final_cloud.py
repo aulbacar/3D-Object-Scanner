@@ -22,11 +22,13 @@ for i in range(2, 124):
     x_offset =  math.sin(i * angle_offset) 
     y_offset =  math.cos(i * angle_offset)
     #z_offset = 0  # adjust the z-axis offset as desired
-    pc[:, 0] += pc[:, 0] * x_offset #+ pc[:, 1] * x_offset
+    #pc[:, 0] += pc[:, 0] * x_offset + pc[:, 1] * x_offset
     #pc[:, 0].depth_scale = 20
     #pc[:, 0] *= x_offset
-    pc[:, 1] += pc[:, 0] * x_offset #- pc[:, 1] * y_offset
+    #pc[:, 1] += pc[:, 0] * x_offset - pc[:, 1] * y_offset
     #pc[:, 2] += z_offset
+    pc[:, 0] += pc[:, 0] * y_offset
+    pc[:, 1] += pc[:, 0] * x_offset
 
     # Apply the desired rotation
     rotation_axis = np.array([0, 0, 1])  # rotate around the y-axis
@@ -51,9 +53,9 @@ cloud = pv.PolyData(points)
 cloud.plot(point_size=15)
 #cloud.plot(render_points_as_spheres=True)
 
-#surf = cloud.delaunay_2d()
-#surf.plot(show_edges=True)
-#surf.save('mesh.stl')
+surf = cloud.delaunay_2d()
+surf.plot(show_edges=True)
+surf.save('mesh.stl')
 #mesh = point_cloud.add_mesh(points)
 #mesh.plot()
 #mesh.save('mesh.stl')

@@ -2,8 +2,8 @@ import cv2 as cv
 import open3d as o3d
 import numpy as np
 from matplotlib import pyplot as plt
-for img_no in range(1,125):
-    img = cv.imread(f'Sample_Data/box/test{img_no}.jpg', cv.IMREAD_GRAYSCALE)
+for img_no in range(2,125):
+    img = cv.imread(f'Sample_Data/bottle/test{img_no}.jpg', cv.IMREAD_GRAYSCALE)
     assert img is not None, "file could not be read, check with os.path.exists()"
 
     ret,th1 = cv.threshold(img,200,255,cv.THRESH_BINARY)

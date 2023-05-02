@@ -169,7 +169,7 @@ for img_no in range(2,124):
     pcd2 = o3d.geometry.PointCloud()
     pcd2.points = o3d.utility.Vector3dVector(point_cloud2[:,:3])
     # if(img_no != 1):
-    theta += 0.273  # 45 degrees
+    theta += 0.05  # 45 degrees
     rot_z = np.array([[np.cos(theta), -np.sin(theta), 0],
                     [np.sin(theta), np.cos(theta), 0],
                     [0, 0, 1]])
