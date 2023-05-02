@@ -5,6 +5,30 @@ from matplotlib import pyplot as plt
 import pyvista as pv
 import math
 
+
+image = cv.imread('Sample_Data/box/cal.jpg')
+gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+ret, thresh = cv.threshold(gray, 127, 255, 0)
+contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+contours = np.vstack(contours).squeeze()
+#print(contours)
+miny = 480
+
+
+i = 0
+while(i < len(contours)):
+    if(contours[i][1] < miny):
+        miny = contours[i][1]
+    #print(contours[i][1])
+    #print("test", contours[1][1])
+    #print(c)
+    #print(maxx)
+    #print(maxy)
+    #c = 0
+    i += 1
+print(miny)
+#miny = 110
+
 ct = 0
 combined_pc = np.empty((0, 3))
 angle_offset = .05
@@ -23,24 +47,54 @@ for img_no in range(2,124):
 
     arr = []
     temp = []
-    maxy = 0
+    #miny = 480
     maxx = 0
     max = 0
 
+    #i = 0
+    #c = 0
+    #minflag = False
+
+    #while(i > len(th1[0])):
+        #while(c < len(th1)):
+           #print('test')
+           #if(th1[c][i] == 255):
+                #print(minflag)
+                #if(i < miny):
+                    #miny = i
+                    #print(miny)
+                    #minflag = True
+                    #print(minflag)
+                    #print(c)
+           #if(minflag == True and th1[i][c] != 255):
+                #minflag = False
+                #print(minflag)
+                #break
+            
+           #c += 1
+        #c = 0
+        #i += 1
+    #print(miny)
+    i = 0
+    c = 0
     while(i < len(th1)):
         while(c < len(th1[0])):
            if(th1[i][c] == 255):
                 if(i > max):
                     max = 640 - c#(c + 200)
-                    maxx = 640 - (c - 50)
+                    scale = int(max * .2)
+                    maxx = 640 - (c - (scale))
+                    maxy = i
                     #print(c)
            c += 1
         #print(c)
         #print(maxx)
+        #print(maxy)
         c = 0
         i += 1
     #print(c)
     print(maxx)
+    #print(maxy)
 
     i = 0
     c = 0
@@ -58,7 +112,7 @@ for img_no in range(2,124):
                 #arr.append(temp)
                 #temp = [0, maxx - c, i]
                 
-                if(i < 440 and i > 110):
+                if(i < 440 and i > miny): #110 for bottle
                     temp = [0, maxx-c, i]
                     arr.append(temp)
             
