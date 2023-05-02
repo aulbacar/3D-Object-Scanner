@@ -15,6 +15,37 @@ contours = np.vstack(contours).squeeze()
 #print(contours)
 miny = 480
 
+maxx = 0
+i = 0
+minx = 640
+maxx_bounds = 0
+contours[contours[: 1].argsort()] 
+while(i < len(contours)):
+    if(contours[i][1] < minx): #finding first bright point(illuminated by laser)
+        minx = contours[i][0]  #then going down the line until there is a dark spot
+    #print(contours[i][1])     #to cut out the laser above the object
+    #print("test", contours[1][1])
+    #print(c)
+    #print(maxx)
+    #print(maxy)
+    #c = 0
+    i += 1
+print(minx)
+
+i = 0
+
+#print(contours)
+while(i < len(contours)):
+    if(contours[i][0] > maxx_bounds): #finding first bright point(illuminated by laser)
+        maxx_bounds = contours[i][0]  #then going down the line until there is a dark spot
+    #print(contours[i][1])     #to cut out the laser above the object
+    #print("test", contours[1][1])
+    #print(c)
+    #print(maxx)
+    #print(maxy)
+    #c = 0
+    i += 1
+#print(maxx)
 
 i = 0
 while(i < len(contours)):
@@ -29,10 +60,24 @@ while(i < len(contours)):
     i += 1
 print(miny)
 #miny = 110
+#print(contours)
+i = 0
+maxy = 0
+while(i < len(contours)):
+    if(contours[i][1] > maxy): #finding first bright point(illuminated by laser)
+        maxy = contours[i][1]  #then going down the line until there is a dark spot
+    #print(contours[i][1])     #to cut out the laser above the object
+    #print("test", contours[1][1])
+    #print(c)
+    #print(maxx)
+    #print(maxy)
+    #c = 0
+    i += 1
+print(maxy)
 
 ct = 0
 combined_pc = np.empty((0, 3))
-angle_offset = .05027
+angle_offset = .0505
 x_offset = 0
 y_offset = 0
 for img_no in range(0, 124):
@@ -87,14 +132,18 @@ for img_no in range(0, 124):
                     maxx = 640 - (c - (scale)) #image is 640 pixels wide, c is the x value (the loop condition is kind of weird)
                     maxy = i                   #the scalar is there because I found that it gives objects better definition
                     #print(c)
+                if(c < maxy):
+                    maxy = c
            c += 1
         #print(c)
         #print(maxx)
-        #print(maxy)
+        #print("maxy", maxy)
+        
         c = 0
         i += 1
     #print(c)
     print(maxx)
+    print("maxy", maxy)
     #print(maxy)
 
     i = 0
@@ -113,7 +162,7 @@ for img_no in range(0, 124):
                 #arr.append(temp)
                 #temp = [0, maxx - c, i]
                 
-                if(i < 440 and i > miny): #440 is the bottom laser height
+                if((i < maxy and i > miny) and (c < maxx_bounds and c > minx)): #440 is the bottom laser height
                     temp = [0, maxx-c, i] #x is 0 so the object is rotating around the same area
                     arr.append(temp)      #the depth is based on the x pixel value with reference to where
                                           #the bottom laser (reference laser) is
