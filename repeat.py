@@ -1,11 +1,6 @@
 import cv2 as cv
 import open3d as o3d
 import numpy as np
-from matplotlib import pyplot as plt
-import pyvista as pv
-import math
-import trimesh
-
 
 image = cv.imread('new_data/square_bottle/test/cal.jpg') #find contours to set y limits on important points
 gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
@@ -30,7 +25,7 @@ while(i < len(contours)):
     #print(maxy)
     #c = 0
     i += 1
-print(minx)
+#print(minx)
 
 i = 0
 
@@ -58,7 +53,7 @@ while(i < len(contours)):
     #print(maxy)
     #c = 0
     i += 1
-print(miny)
+#print(miny)
 #miny = 110
 #print(contours)
 i = 0
@@ -73,7 +68,7 @@ while(i < len(contours)):
     #print(maxy)
     #c = 0
     i += 1
-print(maxy)
+#print(maxy)
 
 ct = 0
 combined_pc = np.empty((0, 3))
@@ -142,8 +137,8 @@ for img_no in range(0, 124):
         c = 0
         i += 1
     #print(c)
-    print(maxx)
-    print("maxy", maxy)
+    #print(maxx)
+    #print("maxy", maxy)
     #print(maxy)
 
     i = 0
