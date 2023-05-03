@@ -2,7 +2,7 @@ import cv2 as cv
 import open3d as o3d
 import numpy as np
 
-image = cv.imread('new_data/square_bottle/test/cal.jpg') #find contours to set y limits on important points
+image = cv.imread('sample_data/masking_tape/cal.jpg') #find contours to set y limits on important points
 gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
 ret, thresh = cv.threshold(gray, 127, 255, 0)
 contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
@@ -51,11 +51,11 @@ while(i < len(contours)):
 
 ct = 0
 combined_pc = np.empty((0, 3))
-angle_offset = .0505
+angle_offset = .05
 x_offset = 0
 y_offset = 0
-for img_no in range(0, 124):
-    img = cv.imread(f'new_data/square_bottle/test/test{img_no}.jpg', cv.IMREAD_GRAYSCALE)
+for img_no in range(0, 127):
+    img = cv.imread(f'sample_data/masking_tape/test{img_no}.jpg', cv.IMREAD_GRAYSCALE)
     assert img is not None, "file could not be read, check with os.path.exists()"
 
     ret,th1 = cv.threshold(img,210,255,cv.THRESH_BINARY) #filtering image by brightness
